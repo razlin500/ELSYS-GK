@@ -1,2 +1,2 @@
-Prosjektet burde ha en liten OLED-skjerm som printer ut IP-adressen til ESP-en, slik at man kan kjøre ESP-en separat fra PCen. 
+Prosjektet burde ha en liten OLED-skjerm som printer ut IP-adressen til ESP-en, slik at man kan kjøre ESP-en faktisk trådløst, helt separat fra PCen. 
 Hvis ikke må man alltid sjekke serial monitor for ip-adressen og lime den inn.
