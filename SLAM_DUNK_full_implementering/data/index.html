@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software. -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="Gruppe 17" />
+    <meta
+      name="description"
+      content="Dette er en infopage om SLAM DUNK-prosjektet"
+    />
+    <title>SLAM DUNK kontrollpanel</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <!-- <link
+      rel="icon"
+      href="SLAMDUNK_fav.png"
+      type="image/x-icon"
+    /> -->
+    <link
+      rel="icon"
+      href="/SLAMDUNK_fav.png"
+      type="image/x-icon"
+    />
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <!--Grafer:-->
+    <style>
+      body {
+        min-width: 310px;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-family: Arial;
+        font-size: 2.5rem;
+        text-align: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Style for the "Aktiver pumpe" button */
+      .button {
+        background-color: blue;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-top: 20px;
+        cursor: pointer;
+      }
+
+      .button:hover {
+        background-color: darkblue;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="main.css"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="image">
+        <img
+          src="/SLAMDUNK_logo"
+          alt="SLAMDUNK logo"
+          width="200"
+          height="200"
+        />
+      </div>
+      <div class="text">
+        <h2>ESP SLAM DUNK Station</h2>
+      </div>
+    </div>
+
+    <div
+      id="chart-container"
+      class="container"
+    ></div>
+    <button
+      id="activatePumpButton"
+      class="button"
+    >
+      Aktiver pumpe
+    </button>
+    <hr />
+    &lt;&lt;&lt;
+    <a href="/about.html"
+      >Om SLAM DUNK - gruppe 17</a
+    >
+    &gt;&gt;&gt;
+  </body>
+  <script>
+    //Code for single chart
+    var chart = new Highcharts.Chart({
+      chart: { renderTo: "chart-container" },
+      title: {
+        text: "Particles and Average Particles",
+      },
+      series: [
+        {
+          name: "Particles",
+          showInLegend: true,
+          data: [],
+        },
+        {
+          name: "Average Particles",
+          showInLegend: true,
+          data: [],
+        },
+      ],
+      plotOptions: {
+        line: {
+          animation: false,
+          dataLabels: { enabled: true },
+        },
+      },
+      xAxis: {
+        type: "datetime",
+        dateTimeLabelFormats: {
+          second: "%H:%M:%S",
+        },
+      },
+      yAxis: {
+        title: {
+          text: "Particles and Average Particles",
+        },
+      },
+      credits: { enabled: false },
+    });
+    //Chart and get function for particles
+    setInterval(function () {
+      var xhttpParticles = new XMLHttpRequest();
+      xhttpParticles.onreadystatechange =
+        function () {
+          if (
+            this.readyState == 4 &&
+            this.status == 200
+          ) {
+            var x = new Date().getTime(),
+              y = parseFloat(this.responseText);
+            if (
+              chart.series[0].data.length > 40
+            ) {
+              chart.series[0].addPoint(
+                [x, y],
+                true,
+                true,
+                true
+              );
+            } else {
+              chart.series[0].addPoint(
+                [x, y],
+                true,
+                false,
+                true
+              );
+            }
+          }
+        };
+      xhttpParticles.open(
+        "GET",
+        "/particles",
+        true
+      );
+      xhttpParticles.send();
+    }, 5000);
+
+    //Chart and get function for average particles
+    setInterval(function () {
+      var xhttpAvParticles = new XMLHttpRequest();
+      xhttpAvParticles.onreadystatechange =
+        function () {
+          if (
+            this.readyState == 4 &&
+            this.status == 200
+          ) {
+            var x = new Date().getTime(),
+              y = parseFloat(this.responseText);
+            if (
+              chart.series[1].data.length > 40
+            ) {
+              chart.series[1].addPoint(
+                [x, y],
+                true,
+                true,
+                true
+              );
+            } else {
+              chart.series[1].addPoint(
+                [x, y],
+                true,
+                false,
+                true
+              );
+            }
+          }
+        };
+      xhttpAvParticles.open(
+        "GET",
+        "/av_particles",
+        true
+      );
+      xhttpAvParticles.send();
+    }, 30000);
+
+    //Manual pump button
+    document
+      .getElementById("activatePumpButton")
+      .addEventListener("click", function () {
+        var xhttpActivate = new XMLHttpRequest();
+        xhttpActivate.open(
+          "GET",
+          "/activate_pump",
+          true
+        ); // Send a GET request to /activate_pump
+        xhttpActivate.send();
+
+        //?
+
+        xhttpActivate.onreadystatechange =
+          function () {
+            if (
+              xhttpActivate.readyState == 4 &&
+              xhttpActivate.status == 200
+            ) {
+              // Handle the response here, if needed
+              alert(
+                "Aktiver pumpe button clicked and /activate_pump request sent"
+              );
+            }
+          };
+      });
+  </script>
+</html>
