@@ -2,9 +2,10 @@
 
 
 #include <ESPAsyncWebServer.h>
-
-
 #include <AsyncTCP.h>
+
+//Bibliotek for å styre URL
+#include <ESPmDNS.h>
 
 #include <WiFi.h>
 #include "SPIFFS.h"
@@ -12,6 +13,8 @@
 
 const char* ssid = "DESKTOP-MJ9LUCK";
 const char* password = "87654321";
+
+const char* mdnsHostname = "SLAMDUNK";
 
 //Deklarerer funksjon for å regne ut gjennomsnittsverdi på array
 int average_value(int inputArray[], int inputArraySize);
@@ -79,6 +82,15 @@ void setup() {
     Serial.println("Connecting to WiFi...");
   }
   Serial.println("Connected to WiFi");
+
+  if (!MDNS.begin(mdnsHostname)) {
+    Serial.println("Error setting up mDNS.");
+  } else {
+    Serial.println("mDNS responder started");
+    Serial.print("URL:");
+    Serial.println(mdnsHostname);
+  }
+  
   //IP address of website
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
