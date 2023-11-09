@@ -26,6 +26,13 @@ String readavparticles();
 //Variabeldeklarasjon
 //LED_diode til WiFi-status
 const int LED_diode = 2;
+//GPIO tilhørende turbiditetssensor
+const int turbiditet_pin = 17;
+//GPIO tilhørende relé
+const int rele_pin = 16;
+//GPIO til skjermen
+const int OLED_1 = 8;
+const int OLED_2 = 9;
 
 
 const char* ssid = "DESKTOP-MJ9LUCK";
@@ -33,11 +40,6 @@ const char* password = "87654321";
 
 const char* mdnsHostname = "SLAMDUNK";
 
-//GPIO tilhørende turbiditetssensor
-const int turbiditet_pin = 17;
-
-//GPIO tilhørende relé
-const int rele_pin = 16;
 
 //Definerer array med gjennomsnittsverdi på pumpeavlesninger. Alle er 8000 for at motoren ikke skal begynne.
 int average_read[10] = {8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000, 8000};
@@ -75,12 +77,11 @@ void setup() {
   // Connect to the WiFi network
   WiFi.begin(ssid, password);
   standard_display();
-  display.print("Connection to WiFi")
+  display.print("Connecting to WiFi...")
   while (WiFi.status() != WL_CONNECTED) {
     wifi_led();
-    delay(100);
+    delay(1000);
     display.print(".");
-    Serial.println("Connection to WiFi...");
   }
   standard_display();
   display.print("Connected to WiFi");
@@ -164,8 +165,11 @@ void setup() {
   });
 
   server.begin();
-  display.print("Server has been initiated");
+  display.print("Server has been initiated:");
+  display.print(ssid);
+  delay(2000);
 }
+
 void loop() {
   // read the input on analog pin 17:
   int sensorValue = analogRead(turbiditet_pin);
