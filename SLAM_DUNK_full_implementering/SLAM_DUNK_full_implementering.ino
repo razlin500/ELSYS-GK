@@ -255,6 +255,7 @@ void status() {
   display.display();
 }
 
+//Metoden vi bruker for å lese av og sende data til nettsiden på kall readparticles() og readavparticles()
 String readparticles() {
   // Read particles
   float p = analogRead(turbiditet_pin);
