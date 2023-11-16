@@ -1,5 +1,7 @@
 HUSK! Koden må kjøres i en arduino 1.x. versjon IDE, for å kunne benytte SPIFFS og webserveren
 
+Alle filer som skal lastes opp til ESPen utenom arduino-filen må ligge i data-mappa.
+
 For å få opp webserveren trengs kun en strømkilde til ESP32, og så kan man koble til nettsiden trådløst, gitt at man er på samme nett som ESP-en.
 Foreløpig i koden vil ESP-en kobles til DESKTOP-MJ9LUCK.
 URL er: slamdunk.local
@@ -7,4 +9,5 @@ URL er: slamdunk.local
 Koden til prosjektet inkluderer to HTML-filer; index.html og about.html, 
 en CSS-fil main.css, 
 og foreløpig to PNG-filer; SLAMDUNK_logo.png og SLAMDUNK_fav.png.
-Det burde legges til et bilde av gruppa til data-mappa, kalt gruppebilde, og det må være en png-fil
+
+Det kan legges til et bilde av gruppa til data-mappa, kalt gruppebilde, og det må være en png-fil
