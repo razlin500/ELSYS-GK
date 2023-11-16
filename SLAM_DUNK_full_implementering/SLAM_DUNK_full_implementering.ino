@@ -34,10 +34,10 @@ const int rele_pin = 16;
 const int OLED_1 = 8;
 const int OLED_2 = 9;
 
-
 const char* ssid = "DESKTOP-MJ9LUCK";
 const char* password = "87654321";
 
+//Custom URL
 const char* mdnsHostname = "SLAMDUNK";
 
 
@@ -93,7 +93,8 @@ void setup() {
     Serial.println("Connecting to WiFi...");
   }
   Serial.println("Connected to WiFi");*/
-
+  
+  //Initialize custom URL for host
   if (!MDNS.begin(mdnsHostname)) {
     Serial.println("Error setting up mDNS.");
   } else {
@@ -102,7 +103,7 @@ void setup() {
     Serial.println(mdnsHostname);
   }
   
-  //IP address of website
+  //IP address of website, should be SLAMDUNK.local
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
@@ -163,7 +164,8 @@ void setup() {
     Serial.println("GET request mottatt");
     request->send_P(200, "text/plain", "Successfull activation");
   });
-
+  
+  //Initialize server over network
   server.begin();
   display.print("Server has been initiated:");
   display.print(ssid);
@@ -174,33 +176,38 @@ void loop() {
   // read the input on analog pin 17:
   int sensorValue = analogRead(turbiditet_pin);
   
-  // print out the value you read:
+  // print out the value you read to serial:
   Serial.print(sensorValue);
  
-  //Flytter alle verdier en plass til venstre for hver gang
+  //Flytter alle leste sensorValue en plass til venstre for hver gang
+  //Pumpe aktiveres basert på gjennomsnitt fra de 10 siste målingene i average_read
   for(int i = 0; i < 9; i++) {
     average_read[i] = average_read[i+1];
   }
   //Endrer siste verdi i arrayet til sist leste verdi
   average_read[9] = sensorValue;
 
-  //Sjekker om gjennomsnittsverdien i arrayet er under 5000, starter pumpe hvis sant
+  //Sjekker om på-knapp på nettsiden er trykket på, aktiverer pumpe i fem sekuner dersom den er på
   if (activate_pump) {
     digitalWrite(rele_pin, LOW);
     status();
     delay(5000);
     activate_pump = !activate_pump;
   }
+  //Sjekker om gjennomsnittsverdien i arrayet average_read er under 5000, starter pumpe hvis sant
   else if (average_value(average_read, 10) < threshold) {
     Serial.println("Pumpe på");
     digitalWrite(rele_pin, LOW);
   }
+  //Slår av pumpen dersom gjennomsnittsverdien i average_read er for høy, og activate_pump er FALSE
   else{
     Serial.println("Pumpe av");
     digitalWrite(rele_pin, HIGH);
   }
   Serial.print(" \n");
+  //Slår på LED så lenge WiFi fungerer som det skal
   wifi_led();
+  //Skriver status til systemet til skjermen
   status();
   delay(1000);
 }
