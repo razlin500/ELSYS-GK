@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html>
-  <!-- Rui Santos - Complete project details at https://RandomNerdTutorials.com
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files.
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software. -->
   <head>
     <meta charset="UTF-8" />
     <meta name="author" content="Gruppe 17" />
@@ -30,7 +24,7 @@ copies or substantial portions of the Software. -->
     />
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
-    <!--Grafer:-->
+    <!--Styling for grafer:-->
     <style>
       body {
         min-width: 310px;
@@ -49,7 +43,7 @@ copies or substantial portions of the Software. -->
         align-items: center;
       }
 
-      /* Style for the "Aktiver pumpe" button */
+      /* Style for "Aktiver pumpe" -knappen */
       .button {
         background-color: blue;
         color: white;
@@ -74,6 +68,7 @@ copies or substantial portions of the Software. -->
     />
   </head>
   <body>
+    /*Container for bilde og logo på kontrollpanel*/
     <div class="container">
       <div class="image">
         <img
@@ -87,7 +82,7 @@ copies or substantial portions of the Software. -->
         <h2>ESP SLAM DUNK Station</h2>
       </div>
     </div>
-
+    /*Container for graf, hit rendres grafen fra javascriptkoden i <script>*/
     <div
       id="chart-container"
       class="container"
@@ -98,6 +93,7 @@ copies or substantial portions of the Software. -->
     >
       Aktiver pumpe
     </button>
+    /*Link til om-side*/
     <hr />
     &lt;&lt;&lt;
     <a href="/about.html"
@@ -106,7 +102,7 @@ copies or substantial portions of the Software. -->
     &gt;&gt;&gt;
   </body>
   <script>
-    //Code for single chart
+    //Kode for selve grafen
     var chart = new Highcharts.Chart({
       chart: { renderTo: "chart-container" },
       title: {
@@ -143,7 +139,7 @@ copies or substantial portions of the Software. -->
       },
       credits: { enabled: false },
     });
-    //Chart and get function for particles
+    //Grafing og get-funksjon for nåværende partikler
     setInterval(function () {
       var xhttpParticles = new XMLHttpRequest();
       xhttpParticles.onreadystatechange =
@@ -178,10 +174,11 @@ copies or substantial portions of the Software. -->
         "/particles",
         true
       );
+    //Spør om måling hvert 5. sekund
       xhttpParticles.send();
     }, 5000);
 
-    //Chart and get function for average particles
+    //Graf og get-funksjonen for gjennomsnittlige partikler, som er verdien som faktisk aktiverer pumpa.
     setInterval(function () {
       var xhttpAvParticles = new XMLHttpRequest();
       xhttpAvParticles.onreadystatechange =
@@ -216,10 +213,10 @@ copies or substantial portions of the Software. -->
         "/av_particles",
         true
       );
+    //Spør om gjennomsnittsmålinger hvert 30. sekund
       xhttpAvParticles.send();
     }, 30000);
-
-    //Manual pump button
+    //Eventlistener for pumpeknappen, sender en get-request til ESPen som den reagerer på med å aktivere pumpa i 5 sekunder
     document
       .getElementById("activatePumpButton")
       .addEventListener("click", function () {
@@ -239,9 +236,9 @@ copies or substantial portions of the Software. -->
               xhttpActivate.readyState == 4 &&
               xhttpActivate.status == 200
             ) {
-              // Handle the response here, if needed
+              // Gir et varsel i nettleseren om at beskjeden ble mottatt
               alert(
-                "Aktiver pumpe button clicked and /activate_pump request sent"
+                "Pumpe aktivert"
               );
             }
           };
