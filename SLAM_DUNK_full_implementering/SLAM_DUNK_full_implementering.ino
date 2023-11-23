@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <ESPAsyncWebServer.h>
+#include <ESPAsyncWebSrv.h>
 #include <AsyncTCP.h>
 //Bibliotek for å styre URL
 #include <ESPmDNS.h>
@@ -34,8 +34,8 @@ const int rele_pin = 16;
 const int OLED_1 = 8;
 const int OLED_2 = 9;
 
-const char* ssid = "DESKTOP-MJ9LUCK";
-const char* password = "87654321";
+const char* ssid = "Tannkrem";
+const char* password = "00000000";
 
 //Custom URL
 const char* mdnsHostname = "SLAMDUNK";
@@ -77,7 +77,7 @@ void setup() {
   // Connect to the WiFi network
   WiFi.begin(ssid, password);
   standard_display();
-  display.print("Connecting to WiFi...")
+  display.print("Connecting to WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
     wifi_led();
     delay(1000);
@@ -232,25 +232,25 @@ void standard_display() {
 
 //Led slåes av/på basert på om WiFi er koblet til eller ikke
 void wifi_led() {
-  if(WiFi.status == WL_CONNECTED) {
-    digitalWrite(LED_diode, HIGH)
+  if(WiFi.status() == WL_CONNECTED) {
+    digitalWrite(LED_diode, HIGH);
   }
   else {
-    digitalWrite(LED_diode, LOW)
+    digitalWrite(LED_diode, LOW);
   }
 }
 
 
 //Printer statusen til systemet på OLED-skjermen
 void status() {
-  standard_display()
+  standard_display();
   display.print("Pumpen er: ");
   if(activate_pump) {
     display.print("på");
   }
   display.print("av");
   display.println();
-  display.print("Gjennomsnittsmåling: ")
+  display.print("Gjennomsnittsmåling: ");
   display.print(average_value(average_read, 10));
   display.display();
 }
